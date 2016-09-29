@@ -236,6 +236,8 @@
         if (!_validationError) {
             VKError *error = [VKError errorWithCode:VK_API_CANCELED];
             [VKSdk setAccessTokenError:error];
+        } else {
+            [_validationError.request cancel];
         }
     }];
 }
