@@ -377,7 +377,7 @@ static NSString *VK_ACCESS_TOKEN_DEFAULTS_KEY = @"VK_ACCESS_TOKEN_DEFAULTS_KEY_D
 }
 
 + (void)wakeUpSession:(NSArray *)permissions completeBlock:(void (^)(VKAuthorizationState, NSError *error))wakeUpBlock {
-    VKAccessToken *token = [self accessToken] ?: [VKAccessToken savedToken:VK_ACCESS_TOKEN_DEFAULTS_KEY];
+    VKAccessToken *token = [self actualToken];
     VKSdk *instance = [self instance];
     if (!token || token.isExpired) {
         [instance resetSdkState];
@@ -452,6 +452,19 @@ static NSString *VK_ACCESS_TOKEN_DEFAULTS_KEY = @"VK_ACCESS_TOKEN_DEFAULTS_KEY_D
     [[VKRequestsScheduler instance] setEnabled:enabled];
 }
 
++ (void)forcedSetAccessToken:(VKAccessToken *)accessToken {
+    self.accessToken = accessToken;
+}
+
++ (void)forcedWakeUpSession {
+    VKSdk *instance = [self instance];
+    instance.accessToken = [self actualToken];
+    instance.authState = VKAuthorizationAuthorized;
+}
+
++ (VKAccessToken *)actualToken {
+    return [self accessToken] ?: [VKAccessToken savedToken:VK_ACCESS_TOKEN_DEFAULTS_KEY];
+}
 
 #pragma mark - Instance methods
 

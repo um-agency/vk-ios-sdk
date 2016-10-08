@@ -321,6 +321,11 @@ Enables or disables scheduling for requests
 */
 + (void)setSchedulerEnabled:(BOOL)enabled;
 
+//custom sdk methods
++ (void)forcedSetAccessToken:(VKAccessToken *)accessToken;
+
++ (void)forcedWakeUpSession;
+
 // Deny allocating more SDK
 + (instancetype)alloc NS_UNAVAILABLE;
 
